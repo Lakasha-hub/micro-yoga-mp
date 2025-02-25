@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/Lakasha-hub/micro-yoga-mp.git/internal/config"
 	"github.com/Lakasha-hub/micro-yoga-mp.git/internal/handlers"
 	"github.com/Lakasha-hub/micro-yoga-mp.git/internal/platform/db"
@@ -34,5 +36,6 @@ func main() {
 	router.POST("/payment", paymentHandler.ProccessPayment)
 
 	// Initialize the server
-	router.Run(":%s", cfg.ServerPort)
+	port := fmt.Sprintf(":%s", cfg.ServerPort)
+	router.Run(port)
 }
