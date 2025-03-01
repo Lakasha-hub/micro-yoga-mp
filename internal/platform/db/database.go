@@ -1,24 +1,20 @@
 package db
 
 import (
+	"database/sql"
 	"fmt"
-
-	"github.com/Lakasha-hub/micro-yoga-mp.git/internal/config"
-	"gorm.io/driver/mysql"
-	"gorm.io/gorm"
 )
 
-var DB *gorm.DB
-
-func Init(cfg config.Config) {
-	dsn := cfg.MySQLDSN
-
-	DB, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+func NewDB(user, password, host, port, dbname string) (*sql.DB, error) {
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true", user, password, host, port, dbname)
+	db, err := sql.Open("mysql", dsn)
 	if err != nil {
-		panic("failed to connect database")
+		return nil, fmt.Errorf("Error when connecting to database: %w", err)
 	}
 
-	fmt.Println("Database connected")
-	// TODO: Create models
-	DB.AutoMigrate()
+	if err := db.Ping(); err != nil {
+		return nil, fmt.Errorf("Error when pinging database: %w", err)
+	}
+
+	return db, nil
 }

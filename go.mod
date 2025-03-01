@@ -1,4 +1,4 @@
-module github.com/Lakasha-hub/micro-yoga-mp.git
+module github.com/Lakasha-hub/micro-yoga-mp
 
 go 1.23.3
 

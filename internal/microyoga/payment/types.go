@@ -1,15 +1,14 @@
 package payment
 
-import "gorm.io/gorm"
-
 type (
 	Payment struct {
-		gorm.Model
-		UserID     string  `json:"user_id" gorm:"not null"`
-		Amount     float64 `json:"amount" gorm:"not null"`
-		Currency   string  `json:"currency" gorm:"not null"`
-		Status     string  `json:"status" gorm:"not null" default:"pending"`
-		ExternalID string  `json:"external_payment_id" gorm:"not null"`
+		UserID            string  `json:"user_id"`
+		Amount            float64 `json:"amount"`
+		Currency          string  `json:"currency"`
+		Status            string  `json:"status"`
+		ExternalPaymentID string  `json:"external_payment_id"`
+		CreatedAt         string  `json:"created_at"`
+		UpdatedAt         string  `json:"updated_at"`
 	}
 
 	PaymentRequest struct {
