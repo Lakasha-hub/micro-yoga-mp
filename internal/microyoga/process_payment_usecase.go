@@ -26,7 +26,8 @@ func (s *MembershipService) ProccessPayment(ctx context.Context, req payment.Pay
 			Message: "Error creating plan subscription",
 		}, err
 	}
-	s.repo.SavePayment(ctx, req)
+	// TO DO: Guardar en la DB
+	//s.repo.SavePayment(ctx, req)
 
 	return payment.PaymentResponse{
 		Success: true,

@@ -6,23 +6,27 @@ import (
 )
 
 type PaymentRepo interface {
-	SavePayment(ctx context.Context, payment PaymentRequest) error
+	Save(ctx context.Context, payment Payment) error
 }
 
 type PaymentMysqlRepo struct {
 	db *sql.DB
 }
 
-func NewPaymentMysqlRepo(db *sql.DB) PaymentRepo {
+func NewPaymentRepo(db *sql.DB) PaymentRepo {
 	return &PaymentMysqlRepo{db: db}
 }
 
-func (r *PaymentMysqlRepo) SavePayment(ctx context.Context, payment PaymentRequest) error {
-	_, err := r.db.ExecContext(ctx, "INSERT INTO payments (user_id, amount, currency, status) VALUES (?, ?, ?)",
+func (r *PaymentMysqlRepo) Save(ctx context.Context, payment Payment) error {
+	_, err := r.db.ExecContext(ctx, "INSERT INTO payments (user_id, amount, currency, status, external_payment_id, subscription_id) VALUES (?, ?, ?, ?, ?)",
 		payment.UserID,
 		payment.Amount,
 		payment.Currency,
+		payment.Status,
+		payment.ExternalPaymentID,
+		payment.SubscriptionID,
 	)
+
 	if err != nil {
 		return err
 	}

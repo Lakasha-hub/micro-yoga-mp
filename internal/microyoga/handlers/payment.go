@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/Lakasha-hub/micro-yoga-mp/internal/microyoga"
@@ -25,4 +26,24 @@ func NewProccessPayment(useCase microyoga.MembershipService) gin.HandlerFunc {
 		ctx.JSON(http.StatusOK, gin.H{"payload": res})
 	}
 
+}
+
+func HandleWebhookPayment() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		var notification struct {
+			ID   string `json:"id"`
+			Type string `json:"type"`
+			Data struct {
+				ID string `json:"id"`
+			} `json:"data"`
+		}
+		if err := ctx.ShouldBindBodyWithJSON(&notification); err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Error Binding JSON"})
+			return
+		}
+
+		log.Print(notification)
+		ctx.JSON(http.StatusOK, nil)
+
+	}
 }
