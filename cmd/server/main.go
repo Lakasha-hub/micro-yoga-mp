@@ -4,10 +4,11 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/Lakasha-hub/micro-yoga-mp/internal/handlers"
-	yoga "github.com/Lakasha-hub/micro-yoga-mp/internal/microyoga"
+	"github.com/Lakasha-hub/micro-yoga-mp/internal/microyoga"
+	"github.com/Lakasha-hub/micro-yoga-mp/internal/microyoga/handlers"
+	"github.com/Lakasha-hub/micro-yoga-mp/internal/microyoga/mp"
 	"github.com/Lakasha-hub/micro-yoga-mp/internal/platform/db"
-	"github.com/Lakasha-hub/micro-yoga-mp/pkg/mp"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -17,11 +18,11 @@ func main() {
 	}
 }
 
-func run() {
+func run() error {
 
 	cfg := LoadConfig()
 
-	db, err := db.NewDB(cfg.DBUser, cfg.DBPassword, cfg.DBHost, cfg.DBPort, cfg.DBName)
+	_, err := db.NewDB(cfg.DBUser, cfg.DBPassword, cfg.DBHost, cfg.DBPort, cfg.DBName)
 	if err != nil {
 		panic("Error connecting to the database")
 	}
@@ -31,12 +32,13 @@ func run() {
 		panic("Error creating MercadoPago client")
 	}
 
-	membershipService := yoga.NewMembershipService(mpClient)
-	paymentHandler := handlers.NewPaymentHandler(membershipService)
+	membershipService := microyoga.NewMembershipService(mpClient)
+	//paymentRepo := payment.NewPaymentRepo(db)
 
 	router := gin.Default()
 
-	router.POST("/payment", paymentHandler.ProccessPayment)
+	router.POST("/payment", handlers.NewProccessPayment(*membershipService))
 
 	router.Run(fmt.Sprintf(":%s", cfg.ServerPort))
+	return nil
 }
