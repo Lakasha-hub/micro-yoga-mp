@@ -13,19 +13,14 @@ type (
 	// }
 
 	PaymentRequest struct {
-		UserID   string  `json:"user_id" binding:"required"`
-		Amount   float64 `json:"amount" binding:"required"`
-		Currency string  `json:"currency" binding:"required"`
-	}
-
-	PaymentResponse struct {
-		Success bool   `json:"success"`
-		Message string `json:"message"`
-		Link    string `json:"link"`
+		UserEmail string  `json:"user_email" binding:"required"`
+		Amount    float64 `json:"amount" binding:"required"`
+		Currency  string  `json:"currency" binding:"required"`
 	}
 
 	Payment struct {
 		UserID            string  `json:"user_id"`
+		UserEmail         string  `json:"user_email"`
 		Type              string  `json:"type"`
 		ExternalPaymentID string  `json:"external_payment_id"`
 		SubscriptionID    string  `json:"subscription_id"`

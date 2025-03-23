@@ -27,11 +27,15 @@ func (c *Client) CreateSuscriptionPlan(req payment.PaymentRequest) (*preapproval
 	planRequest := preapproval.Request{
 		Reason: "Formación Natha Yoga",
 		AutoRecurring: &preapproval.AutoRecurringRequest{
-			Frequency:         1,
-			FrequencyType:     "months",
-			TransactionAmount: req.Amount,
-			CurrencyID:        req.Currency,
+			Frequency:     1,
+			FrequencyType: "months",
+			// TransactionAmount: req.Amount,
+			// CurrencyID:        req.Currency,
+			TransactionAmount: 100,
+			CurrencyID:        "ARS",
 		},
+		PayerEmail: req.UserEmail,
+		Status:     "pending",
 	}
 
 	res, err := c.preapprovalClient.Create(context.Background(), planRequest)

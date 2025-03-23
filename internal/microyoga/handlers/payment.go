@@ -37,6 +37,7 @@ func HandleWebhookPayment() gin.HandlerFunc {
 				ID string `json:"id"`
 			} `json:"data"`
 		}
+
 		if err := ctx.ShouldBindBodyWithJSON(&notification); err != nil {
 			ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Error Binding JSON"})
 			return

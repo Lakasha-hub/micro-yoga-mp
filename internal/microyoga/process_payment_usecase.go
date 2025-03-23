@@ -18,20 +18,11 @@ func NewMembershipService(mpClient *mp.Client) *MembershipService {
 	}
 }
 
-func (s *MembershipService) ProccessPayment(ctx context.Context, req payment.PaymentRequest) (payment.PaymentResponse, error) {
+func (s *MembershipService) ProccessPayment(ctx context.Context, req payment.PaymentRequest) (string, error) {
 	plan, err := s.MercadoPagoClient.CreateSuscriptionPlan(req)
 	if err != nil {
-		return payment.PaymentResponse{
-			Success: false,
-			Message: "Error creating plan subscription",
-		}, err
+		return "", err
 	}
-	// TO DO: Guardar en la DB
-	//s.repo.SavePayment(ctx, req)
 
-	return payment.PaymentResponse{
-		Success: true,
-		Message: "Preference created",
-		Link:    plan.InitPoint,
-	}, nil
+	return plan.InitPoint, nil
 }
